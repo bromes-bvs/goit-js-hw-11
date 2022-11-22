@@ -22,6 +22,7 @@ function handleSearch(event) {
   galleryElem.innerHTML = '';
   searchValue = event.currentTarget.elements.searchQuery.value.trim();
   page = 1;
+  // console.log(searchValue);
 
   if (!searchValue) {
     Notiflix.Notify.info('Please enter something');
@@ -29,9 +30,14 @@ function handleSearch(event) {
     loadMoreBtnElem.style.display = 'none';
     return;
   }
-  console.log(searchValue);
 
   fetchArticles(searchValue, page).then(({ hits, totalHits }) => {
+    if (totalHits === 0) {
+      Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+      return;
+    }
     Notiflix.Notify.info(`Hooray! We found ${totalHits} images.`);
     renderArticles(hits);
 
@@ -40,8 +46,8 @@ function handleSearch(event) {
       captionDelay: 250,
     });
     page += 1;
+    loadMoreBtnElem.style.display = 'inline-block';
   });
-  loadMoreBtnElem.style.display = 'inline-block';
 }
 
 function handleLoadMoreClick() {
@@ -67,9 +73,6 @@ function renderArticles(articles) {
 
   const markup = cardsTpl(articles);
   if (!articles.length) {
-    Notiflix.Notify.failure(
-      'Sorry, there are no images matching your search query. Please try again.'
-    );
     return;
   }
   if (articles.length < 40 && articles.length !== 0) {
