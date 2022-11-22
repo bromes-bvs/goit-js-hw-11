@@ -76,10 +76,10 @@ function renderArticles(articles) {
     return;
   }
   if (articles.length < 40 && articles.length !== 0) {
-    loadMoreBtnElem.style.display = 'none';
     Notiflix.Notify.info(
       "We're sorry, but you've reached the end of search results."
     );
+    loadMoreBtnElem.style.display = 'none';
   }
   galleryElem.insertAdjacentHTML('beforeend', markup);
 }
